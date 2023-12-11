@@ -1,0 +1,26 @@
+CREATE TABLE IF NOT EXISTS SeenNames (
+  name TEXT NOT NULL,
+  gender TEXT NOT NULL,
+  liked INTEGER NOT NULL,
+  UNIQUE(name, gender)
+);
+
+SelectAll:
+SELECT * FROM SeenNames;
+
+SelectAllGender:
+SELECT * FROM SeenNames
+WHERE gender = :gender;
+
+InsertName:
+INSERT OR REPLACE INTO SeenNames(name, gender, liked)
+VALUES (?, ?, ?);
+
+UpdateLikeStatus:
+UPDATE SeenNames
+SET liked = :liked
+WHERE gender = :gender AND name = :name;
+
+DeleteNameAndGender:
+DELETE FROM SeenNames
+WHERE name = :name AND gender = :gender;

@@ -1,0 +1,87 @@
+[versions]
+appcompat = "1.6.1"
+activityCompose = "1.8.0"
+calendarComposeDatepicker = "1.0.5"
+calfUi = "0.2.0"
+composeSwipeboxMultiplatform = "1.0.0"
+coreKtx = "1.12.0"
+crashlytics = "0.8.5"
+desugar_jdk_libs = "2.0.4"
+firebaseCommonKtx = "20.4.2"
+firebase = "1.10.3"
+jna = "5.13.0"
+multiplatformSettingsNoArg = "1.1.0"
+spotless = "6.22.0"
+ktlint = "0.49.1"
+agp = "8.2.0"
+kotlin = "1.9.21"
+voyager = "1.0.0"
+koin = "3.5.0"
+kotlinxDateTime = "0.4.1"
+kotlinxSerializationJson = "1.6.0"
+ktor = "2.3.5"
+compose = "1.5.11"
+turbine = "1.0.0"
+coroutines = "1.7.3"
+jdk = "17"
+sqlDelight = "2.0.0"
+
+[plugins]
+spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+
+[libraries]
+appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
+activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activityCompose" }
+calendar-compose-datepicker = { module = "io.github.epicarchitect:calendar-compose-datepicker", version.ref = "calendarComposeDatepicker" }
+calf-ui = { module = "com.mohamedrejeb.calf:calf-ui", version.ref = "calfUi" }
+compose-swipebox-multiplatform = { module = "io.github.kevinnzou:compose-swipebox-multiplatform", version.ref = "composeSwipeboxMultiplatform" }
+core-ktx = { module = "androidx.core:core-ktx", version.ref = "coreKtx" }
+crashlytics = { module = "co.touchlab.crashkios:crashlytics", version.ref = "crashlytics" }
+desugar_jdk_libs = { module = "com.android.tools:desugar_jdk_libs", version.ref = "desugar_jdk_libs" }
+firebase-common-ktx = { module = "com.google.firebase:firebase-common-ktx", version.ref = "firebaseCommonKtx" }
+firebase-common = { module = "dev.gitlive:firebase-common", version.ref = "firebase" }
+firebase-crashlytics = { module = "dev.gitlive:firebase-crashlytics", version.ref = "firebase" }
+firebase-firestore = { module = "dev.gitlive:firebase-firestore", version.ref = "firebase" }
+firebase-auth = { module = "dev.gitlive:firebase-auth", version.ref = "firebase" }
+jna = { module = "net.java.dev.jna:jna", version.ref = "jna" }
+kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
+multiplatform-settings-no-arg = { module = "com.russhwolf:multiplatform-settings-no-arg", version.ref = "multiplatformSettingsNoArg" }
+spotless-gradlePlugin = { module = "com.diffplug.spotless:spotless-plugin-gradle", version.ref = "spotless" }
+android-gradlePlugin = { module = "com.android.tools.build:gradle", version.ref = "agp" }
+kotlin-gradlePlugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
+
+voyager-navigator = { module = "cafe.adriel.voyager:voyager-navigator", version.ref = "voyager" }
+voyager-transitions = { module = "cafe.adriel.voyager:voyager-transitions", version.ref = "voyager" }
+voyager-koin = { module = "cafe.adriel.voyager:voyager-koin", version.ref = "voyager" }
+voyager-tabNavigator = { module = "cafe.adriel.voyager:voyager-tab-navigator", version.ref = "voyager" }
+
+koin = { module = "io.insert-koin:koin-core", version.ref = "koin"}
+koin-jvm = { module = "io.insert-koin:koin-core-jvm", version.ref = "koin"}
+koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin"}
+
+kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinxDateTime" }
+kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
+
+ktor-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
+ktor-serialization-kotlinx = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
+ktor-content-negotiation = { group = "io.ktor", name = "ktor-client-content-negotiation", version.ref = "ktor" }
+ktor-client-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
+ktor-client-darwin = { module = "io.ktor:ktor-client-darwin", version.ref = "ktor" }
+ktor-client-logging = { module = "io.ktor:ktor-client-logging", version.ref = "ktor" }
+
+sqldelight-driver-android = { module = "app.cash.sqldelight:android-driver", version.ref = "sqlDelight" }
+sqldelight-driver-ios = { module = "app.cash.sqldelight:native-driver", version.ref = "sqlDelight" }
+sqldelight-driver-jvm = { module = "app.cash.sqldelight:sqlite-driver", version.ref = "sqlDelight" }
+sqldelight-coroutines = { module = "app.cash.sqldelight:coroutines-extensions", version.ref = "sqlDelight" }
+sqldelight-native = { module = "app.cash.sqldelight:native-driver", version.ref = "sqlDelight" }
+sqldelight-runtime = { module = "app.cash.sqldelight:runtime", version.ref = "sqlDelight" }
+
+turbine = { module = "app.cash.turbine:turbine", version.ref = "turbine" }
+coroutinesTest = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
+
+[bundles]
+sqldelight-common = [
+    "sqldelight-runtime",
+    "sqldelight-coroutines"
+]
