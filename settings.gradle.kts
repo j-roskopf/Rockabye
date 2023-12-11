@@ -1,4 +1,4 @@
-rootProject.name = "Bundle"
+rootProject.name = "Rockabye"
 
 include(":androidApp")
 include(":shared")
