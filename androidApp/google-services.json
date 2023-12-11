@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1098864067029",
+    "project_id": "bundle-13afa",
+    "storage_bucket": "bundle-13afa.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1098864067029:android:19d8c6f184ced25f3e7d5c",
+        "android_client_info": {
+          "package_name": "com.rockabye.bundle"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCEQCyOB20nkn_F-GttHd1T0VTvsDmO_ww"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
