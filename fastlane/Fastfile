@@ -15,7 +15,7 @@ platform :ios do
       use_automatic_signing: false,
       path: 'iosApp/iosApp.xcodeproj',
       targets: 'iosApp',
-      profile_name: 'match AppStore com.joetr.bundle',
+      profile_name: 'match AppStore com.joetr.bundle 1702321709',
     )
     update_code_signing_settings(
       use_automatic_signing: false,
@@ -47,7 +47,7 @@ platform :ios do
       use_automatic_signing: false,
       path: 'iosApp/iosApp.xcodeproj',
       targets: 'iosApp',
-      profile_name: 'match AppStore com.joetr.bundle',
+      profile_name: 'match AppStore com.joetr.bundle 1702321709',
     )
     update_code_signing_settings(
       use_automatic_signing: false,
