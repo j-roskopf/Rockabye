@@ -122,8 +122,7 @@ class NameScreenModel(
 
         val filteredList = set.filter {
             seenNames.contains(it.key).not()
-        }.toList()
-        // todo joer add back .shuffled()
+        }.toList().shuffled()
 
         return filteredList
     }

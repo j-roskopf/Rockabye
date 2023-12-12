@@ -94,7 +94,6 @@ kotlin {
                 implementation(kotlin("test"))
                 implementation(libs.turbine)
                 implementation(libs.coroutinesTest)
-                dependsOn(androidMain)
             }
         }
 

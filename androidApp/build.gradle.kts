@@ -31,12 +31,12 @@ if (keyPropertiesFile.exists()) {
 
 android {
     compileSdk = (findProperty("android.compileSdk") as String).toInt()
-    namespace = "com.rockabye.bundle"
+    namespace = "com.joetr.bundle"
 
     sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
 
     defaultConfig {
-        applicationId = "com.rockabye.bundle"
+        applicationId = "com.joetr.bundle"
         minSdk = (findProperty("android.minSdk") as String).toInt()
         targetSdk = (findProperty("android.targetSdk") as String).toInt()
         versionCode = (findProperty("android.versionCode") as String).toInt()
