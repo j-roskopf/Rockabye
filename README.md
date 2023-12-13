@@ -36,7 +36,7 @@ Android is published on release via fastlane by creating a tag (release/x.y.z)
         keyPassword=<key password>
         storePassword=<stote password>
         storeFile=keystore.jks
-      ```
+       ```
 
 ## Mockups
 https://studio.app-mockup.com/
