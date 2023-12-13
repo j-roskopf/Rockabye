@@ -505,7 +505,7 @@ class NameScreen : Screen {
         personStatus: Pair<Boolean, Boolean>,
     ) {
         Row(
-            modifier = modifier.fillMaxWidth().padding(top = 32.dp),
+            modifier = modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceEvenly,
         ) {
             if (personStatus.first || personStatus.second) {
