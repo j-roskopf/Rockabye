@@ -8,6 +8,7 @@ import com.joetr.bundle.data.NameRepository
 import com.joetr.bundle.data.model.Connection
 import com.joetr.bundle.data.model.Gender
 import com.joetr.bundle.ui.data.NameYearData
+import com.joetr.bundle.ui.name.data.NameSort
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
@@ -27,6 +28,9 @@ class NameScreenModel(
     val state: StateFlow<NameScreenState> = _state
 
     private var updatesJob: Job? = null
+    private var cacheJob: Job? = null
+
+    var names: List<Pair<String, List<NameYearData>>>? = null
 
     init {
         screenModelScope.launch(coroutineDispatcher) {
@@ -34,19 +38,33 @@ class NameScreenModel(
         }
     }
 
-    fun readData() {
+    fun startCacheCollection() {
+        cacheJob?.cancel()
+        cacheJob = screenModelScope.launch(coroutineDispatcher) {
+            nameRepository.clearCache().collect {
+                if (it) {
+                    clearCache()
+                    readData()
+                }
+            }
+        }
+    }
+
+    fun readData(useCacheIfAvailable: Boolean = true) {
         _state.value = NameScreenState.Loading
         updatesJob?.cancel()
         updatesJob = screenModelScope.launch(coroutineDispatcher) {
             runCatching {
                 val connectionFlow = getConnectionFlow()
-                val filteredListOfNames = getFilteredListOfNames()
-                val lastName = nameRepository.getLastName()
-
+                val filteredListOfNames = if (names != null && useCacheIfAvailable) {
+                    names!!
+                } else {
+                    getFilteredListOfNames()
+                }
                 combine(
                     flowOf(filteredListOfNames),
                     connectionFlow,
-                    flowOf(lastName),
+                    flowOf(nameRepository.getLastName()),
                 ) { names: List<Pair<String, List<NameYearData>>>, connection: Connection?, lastName: String? ->
                     Triple(names, connection, lastName)
                 }
@@ -54,7 +72,7 @@ class NameScreenModel(
                 onSuccess = {
                     it.collect { data ->
                         val connection = data.second
-                        val names = data.first
+                        names = data.first
                         val lastName = data.third
 
                         val userId = nameRepository.getUserId()
@@ -69,7 +87,7 @@ class NameScreenModel(
                             },
                         )
 
-                        if (names.isEmpty()) {
+                        if (names?.isEmpty() == true) {
                             _state.emit(
                                 NameScreenState.Empty(
                                     personStatus = personStatus,
@@ -79,7 +97,7 @@ class NameScreenModel(
                         } else {
                             _state.emit(
                                 NameScreenState.Content(
-                                    data = names,
+                                    data = names!!,
                                     personStatus = personStatus,
                                     connectionCode = connection?.id,
                                     lastName = lastName,
@@ -120,11 +138,23 @@ class NameScreenModel(
             it.name
         }
 
+        val sorting = nameRepository.getSorting()
+
         val filteredList = set.filter {
             seenNames.contains(it.key).not()
-        }.toList().shuffled()
+        }.toList()
 
-        return filteredList
+        return when (sorting) {
+            NameSort.RANDOM -> {
+                filteredList.shuffled()
+            }
+
+            NameSort.POPULAR -> {
+                filteredList.sortedByDescending {
+                    (it.second[0].popularity)
+                }
+            }
+        }
     }
 
     private suspend fun getConnectionFlow(): Flow<Connection?> {
@@ -140,6 +170,10 @@ class NameScreenModel(
         screenModelScope.launch(coroutineDispatcher) {
             nameRepository.insertName(name, gender, liked)
         }
+    }
+
+    private fun clearCache() {
+        names = null
     }
 
     private fun processNames(
@@ -164,38 +198,43 @@ class NameScreenModel(
 
                 if (genderFilter.abbreviation == Gender.BOTH.abbreviation || gender == genderFilter.abbreviation) {
                     // Handle the data as needed
-                    set.getOrPut(name) {
+                    val entry = set.getOrPut(name) {
                         mutableListOf()
-                    }.add(
-                        NameYearData(
-                            year = year.toInt(),
-                            popularity = popularity.toLong(),
-                            popularityTotal = sum.toLong(),
-                            genderAbbreviation = gender,
-                        ),
+                    }
+                    val popularityLong = popularity.toLong()
+                    val nameYearData = NameYearData(
+                        year = year.toInt(),
+                        popularity = popularityLong,
+                        popularityTotal = sum.toLong(),
+                        genderAbbreviation = gender,
                     )
+                    if (entry.isEmpty()) {
+                        entry.add(
+                            nameYearData,
+                        )
+                    } else {
+                        val index = entry.indexOfFirst {
+                            it.popularity < popularityLong
+                        }
+                        if (index == -1) {
+                            entry.add(nameYearData)
+                        } else {
+                            entry.add(index, nameYearData)
+                        }
+                    }
                 }
             }
         }
 
         return set
     }
+
+    fun setSorting(sorting: NameSort) {
+        screenModelScope.launch(coroutineDispatcher) {
+            nameRepository.saveSortingLocally(sorting)
+            readData(
+                useCacheIfAvailable = false,
+            )
+        }
+    }
 }
-
-/**
- * new names (last year available)
- * filter by specific year
- * filter by millenia - 1900-1999
- */
-
-/**
- * auto create room ID
- * connect to room
- * UI for adding partner
- * filter UI
- *
- *every seen name goes into local sqlight db
- * filter list from there before processing
- *
- * firebase
- */
