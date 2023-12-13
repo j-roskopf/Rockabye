@@ -1,5 +1,6 @@
 package com.joetr.bundle.ui.name
 
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -10,11 +11,13 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Badge
@@ -24,18 +27,24 @@ import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FilterAlt
 import androidx.compose.material.icons.filled.Flip
 import androidx.compose.material.icons.filled.Group
+import androidx.compose.material.icons.filled.Sort
 import androidx.compose.material.icons.filled.ThumbDown
 import androidx.compose.material.icons.filled.ThumbUp
 import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Divider
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -57,10 +66,12 @@ import com.joetr.bundle.design.swipe.flip.TwyperFlip
 import com.joetr.bundle.design.swipe.flip.rememberTwyperFlipController
 import com.joetr.bundle.design.theme.ErrorState
 import com.joetr.bundle.design.theme.LoadingState
+import com.joetr.bundle.design.toolbar.DefaultToolbar
 import com.joetr.bundle.ui.connection.ConnectionScreen
 import com.joetr.bundle.ui.data.NameYearData
 import com.joetr.bundle.ui.detail.NameDetailScreen
 import com.joetr.bundle.ui.filter.FilterScreen
+import com.joetr.bundle.ui.name.data.NameSort
 import com.joetr.bundle.ui.seen.SeenNamesScreen
 
 class NameScreen : Screen {
@@ -69,55 +80,156 @@ class NameScreen : Screen {
     override fun Content() {
         val screenModel = getScreenModel<NameScreenModel>()
         val navigator = LocalNavigator.currentOrThrow
+        val state = screenModel.state.collectAsState().value
 
         LifecycleEffect(
             onStarted = {
                 screenModel.readData()
+                screenModel.startCacheCollection()
             },
         )
 
-        when (val state = screenModel.state.collectAsState().value) {
-            is NameScreenState.Content -> ContentState(
-                data = state.data,
-                nameRemoved = { name, gender, liked ->
-                    screenModel.nameRemoved(name, gender, liked)
-                },
-                seenNamesClicked = {
-                    navigator.push(SeenNamesScreen(it))
-                },
-                filterClicked = {
-                    navigator.push(FilterScreen())
-                },
-                endReached = {
-                    screenModel.readData()
-                },
-                learnMore = {
-                    navigator.push(NameDetailScreen(it))
-                },
-                connectionClicked = {
-                    navigator.push(ConnectionScreen())
-                },
-                personStatus = state.personStatus,
-                connectionId = state.connectionCode,
-                lastName = state.lastName,
-            )
+        Scaffold(
+            topBar = {
+                DefaultToolbar(
+                    actions = {
+                        PopupMenu(
+                            sortClicked = {
+                                screenModel.setSorting(it)
+                            },
+                        )
 
-            is NameScreenState.Error -> ErrorState()
+                        IconButton(
+                            onClick = {
+                                if (state is NameScreenState.Content) {
+                                }
+                            },
+                            modifier = Modifier.defaultMinSize(minWidth = 48.dp, minHeight = 48.dp),
+                            content = {
+                                Icon(
+                                    imageVector = Icons.Default.Sort,
+                                    contentDescription = null,
+                                    tint = MaterialTheme.colorScheme.primary,
+                                )
+                            },
+                        )
+                    },
+                )
+            },
+        ) { paddingValues ->
+            AnimatedContent(
+                targetState = state,
+                contentKey = {
+                    state.animationKey
+                },
+            ) { targetState ->
+                when (targetState) {
+                    is NameScreenState.Content -> ContentState(
+                        modifier = Modifier.padding(paddingValues),
+                        data = targetState.data,
+                        nameRemoved = { name, gender, liked ->
+                            screenModel.nameRemoved(name, gender, liked)
+                        },
+                        seenNamesClicked = {
+                            navigator.push(SeenNamesScreen(it))
+                        },
+                        filterClicked = {
+                            navigator.push(FilterScreen())
+                        },
+                        endReached = {
+                            screenModel.readData()
+                        },
+                        learnMore = {
+                            navigator.push(NameDetailScreen(it))
+                        },
+                        connectionClicked = {
+                            navigator.push(ConnectionScreen())
+                        },
+                        personStatus = targetState.personStatus,
+                        connectionId = targetState.connectionCode,
+                        lastName = targetState.lastName,
+                    )
 
-            is NameScreenState.Loading -> LoadingState()
-            is NameScreenState.Empty -> EmptyState(
-                personStatus = state.personStatus,
-                seenNamesClicked = {
-                    navigator.push(SeenNamesScreen(it))
-                },
-                filterClicked = {
-                    navigator.push(FilterScreen())
-                },
-                connectionClicked = {
-                    navigator.push(ConnectionScreen())
-                },
-                connectionId = state.connectionCode,
-            )
+                    is NameScreenState.Error -> ErrorState(
+                        modifier = Modifier.padding(paddingValues),
+                    )
+
+                    is NameScreenState.Loading -> LoadingState(
+                        modifier = Modifier.padding(paddingValues),
+                    )
+
+                    is NameScreenState.Empty -> EmptyState(
+                        modifier = Modifier.padding(paddingValues),
+                        personStatus = targetState.personStatus,
+                        seenNamesClicked = {
+                            navigator.push(SeenNamesScreen(it))
+                        },
+                        filterClicked = {
+                            navigator.push(FilterScreen())
+                        },
+                        connectionClicked = {
+                            navigator.push(ConnectionScreen())
+                        },
+                        connectionId = targetState.connectionCode,
+                    )
+                }
+            }
+        }
+    }
+
+    @Composable
+    private fun PopupMenu(
+        sortClicked: (NameSort) -> Unit,
+    ) {
+        val expanded = remember { mutableStateOf(false) }
+
+        Box(
+            modifier = Modifier.fillMaxWidth()
+                .wrapContentSize(Alignment.TopEnd),
+        ) {
+            IconButton(onClick = { expanded.value = expanded.value.not() }) {
+                Icon(
+                    imageVector = Icons.Default.Sort,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.primary,
+                )
+            }
+
+            DropdownMenu(
+                expanded = expanded.value,
+                onDismissRequest = { expanded.value = false },
+            ) {
+                Text(
+                    modifier = Modifier.padding(8.dp),
+                    text = "Sort by:",
+                )
+
+                Divider(
+                    modifier = Modifier.padding(
+                        horizontal = 16.dp,
+                        vertical = 8.dp,
+                    ),
+                )
+
+                NameSort.entries.forEach {
+                    DropdownMenuItem(
+                        text = { Text(it.display) },
+                        onClick = {
+                            sortClicked(it)
+                            expanded.value = false
+                        },
+                    )
+
+                    if (it != NameSort.entries.last()) {
+                        Divider(
+                            modifier = Modifier.padding(
+                                horizontal = 16.dp,
+                                vertical = 8.dp,
+                            ),
+                        )
+                    }
+                }
+            }
         }
     }
 

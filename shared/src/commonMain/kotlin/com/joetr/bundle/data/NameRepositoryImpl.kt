@@ -12,6 +12,7 @@ import com.joetr.bundle.data.model.Gender
 import com.joetr.bundle.ui.connection.data.ConnectionStatus
 import com.joetr.bundle.ui.data.TimePeriodFilters
 import com.joetr.bundle.ui.filter.textFileRange
+import com.joetr.bundle.ui.name.data.NameSort
 import com.joetr.bundle.util.randomUUID
 import com.russhwolf.settings.Settings
 import com.russhwolf.settings.get
@@ -20,6 +21,8 @@ import dev.gitlive.firebase.Firebase
 import dev.gitlive.firebase.auth.auth
 import dev.gitlive.firebase.firestore.firestore
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withTimeout
 import kotlinx.datetime.Clock
@@ -34,6 +37,7 @@ private const val STARTS_WITH_KEY = "starts_with"
 private const val TIME_PERIOD_KEY = "time_period"
 private const val MAX_LENGTH_KEY = "max_length"
 private const val USER_ID_KEY = "user_id"
+private const val SORTING_KEY = "sorting"
 private const val LAST_KNOWN_CONNECTION_CODE = "last_known_connection_code"
 
 class NameRepositoryImpl(
@@ -46,6 +50,9 @@ class NameRepositoryImpl(
 ) : NameRepository {
 
     private val firestore = Firebase.firestore
+
+    private val _cacheClear = MutableSharedFlow<Boolean>()
+    val cacheClear: SharedFlow<Boolean> = _cacheClear
 
     init {
         firestore.setSettings(
@@ -330,6 +337,14 @@ class NameRepositoryImpl(
         }
     }
 
+    override suspend fun clearCache(): Flow<Boolean> {
+        return cacheClear
+    }
+
+    override suspend fun emitClearCacheSignal() {
+        _cacheClear.emit(true)
+    }
+
     override suspend fun updateLikeStatus(
         newLikeStatus: Long,
         genderAbbreviation: String,
@@ -464,6 +479,14 @@ class NameRepositoryImpl(
     override fun getLastName(): String? {
         return settings.getLastName()
     }
+
+    override suspend fun saveSortingLocally(sorting: NameSort) {
+        settings[SORTING_KEY] = sorting.key
+    }
+
+    override suspend fun getSorting(): NameSort {
+        return settings.getSortingOrDefault()
+    }
 }
 
 internal fun Settings.getTimePeriodOrDefault(): TimePeriodFilters {
@@ -509,4 +532,11 @@ fun Settings.getStartsWithOrDefault(): String {
 
 fun Settings.getLastName(): String? {
     return getStringOrNull(LAST_NAME_KEY)
+}
+
+fun Settings.getSortingOrDefault(): NameSort {
+    val sorting = this.getIntOrNull(SORTING_KEY)
+    return NameSort.entries.firstOrNull {
+        it.key == sorting
+    } ?: NameSort.POPULAR
 }

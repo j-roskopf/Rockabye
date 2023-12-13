@@ -12,12 +12,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 internal val textFileRange = 1880..2022
-private val defaultGender = Gender.MALE
-private const val GENDER_KEY = "gender"
-private const val YEAR_KEY = "year"
-private const val STARTS_WITH_KEY = "starts_with"
-private const val TIME_PERIOD_KEY = "time_period"
-private const val MAX_LENGTH_KEY = "max_length"
 
 class FilterScreenModel(
     private val coroutineDispatcher: CoroutineDispatcher,
@@ -32,7 +26,9 @@ class FilterScreenModel(
     private val _state = MutableStateFlow<FilterScreenState>(FilterScreenState.Loading)
     val state: StateFlow<FilterScreenState> = _state
 
-    fun init() {
+    fun init(
+        clearCache: Boolean = false,
+    ) {
         screenModelScope.launch(coroutineDispatcher) {
             selectedGender = nameRepository.getGenderOrDefault()
             selectedTimePeriod = nameRepository.getTimePeriodOrDefault()
@@ -44,6 +40,10 @@ class FilterScreenModel(
                 selectedStartsWith = selectedStartsWith,
                 selectedMaxLength = selectedMaxLength,
             )
+
+            if (clearCache) {
+                nameRepository.emitClearCacheSignal()
+            }
         }
     }
 
@@ -57,7 +57,9 @@ class FilterScreenModel(
 
     fun onGenderSelected(gender: Gender) {
         nameRepository.setGender(gender)
-        init()
+        init(
+            clearCache = true,
+        )
     }
 
     fun timePeriodScreen() {
@@ -70,12 +72,16 @@ class FilterScreenModel(
 
     fun onYearSelected(year: Int) {
         nameRepository.setYear(year)
-        init()
+        init(
+            clearCache = true,
+        )
     }
 
     fun timePeriodSelected(timePeriodFilters: TimePeriodFilters) {
         nameRepository.setTimePeriod(timePeriodFilters)
-        init()
+        init(
+            clearCache = true,
+        )
     }
 
     fun startsWithScreen() {
@@ -87,7 +93,9 @@ class FilterScreenModel(
 
     fun startsWithSelected(startsWith: String) {
         nameRepository.setStartsWith(startsWith)
-        init()
+        init(
+            clearCache = true,
+        )
     }
 
     fun maxLengthScreen() {
@@ -98,7 +106,9 @@ class FilterScreenModel(
 
     fun maxLengthSelected(maxLength: Int) {
         nameRepository.setMaxLength(maxLength)
-        init()
+        init(
+            clearCache = true,
+        )
     }
 
     fun reset() {
@@ -112,6 +122,8 @@ class FilterScreenModel(
         nameRepository.setTimePeriod(selectedTimePeriod)
         nameRepository.setGender(selectedGender)
 
-        init()
+        init(
+            clearCache = true,
+        )
     }
 }

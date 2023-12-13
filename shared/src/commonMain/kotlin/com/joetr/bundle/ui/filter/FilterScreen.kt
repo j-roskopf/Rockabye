@@ -49,7 +49,7 @@ import com.joetr.bundle.design.toolbar.DefaultToolbar
 import com.joetr.bundle.design.toolbar.backOrNull
 import com.joetr.bundle.ui.data.TimePeriodFilters
 
-class FilterScreen : Screen {
+class FilterScreen() : Screen {
 
     @Composable
     override fun Content() {

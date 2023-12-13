@@ -5,6 +5,7 @@ import com.joetr.bundle.data.model.Connection
 import com.joetr.bundle.data.model.Gender
 import com.joetr.bundle.ui.connection.data.ConnectionStatus
 import com.joetr.bundle.ui.data.TimePeriodFilters
+import com.joetr.bundle.ui.name.data.NameSort
 import kotlinx.coroutines.flow.Flow
 
 interface NameRepository {
@@ -41,6 +42,10 @@ interface NameRepository {
 
     suspend fun connectionUpdates(connectionCode: String): Flow<Connection?>
 
+    suspend fun clearCache(): Flow<Boolean>
+
+    suspend fun emitClearCacheSignal()
+
     suspend fun updateLikeStatus(
         newLikeStatus: Long,
         genderAbbreviation: String,
@@ -53,4 +58,7 @@ interface NameRepository {
 
     suspend fun saveLastNameLocally(lastName: String)
     fun getLastName(): String?
+
+    suspend fun saveSortingLocally(sorting: NameSort)
+    suspend fun getSorting(): NameSort
 }

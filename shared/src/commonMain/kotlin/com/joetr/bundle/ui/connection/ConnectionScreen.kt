@@ -49,6 +49,7 @@ import com.joetr.bundle.design.theme.ErrorState
 import com.joetr.bundle.design.theme.LoadingState
 import com.joetr.bundle.design.toolbar.DefaultToolbar
 import com.joetr.bundle.design.toolbar.backOrNull
+import com.joetr.bundle.ui.info.InfoScreen
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -203,6 +204,9 @@ class ConnectionScreen() : Screen {
                             onLastNameTextChange = {
                                 lastName.value = it
                             },
+                            nameInformationClicked = {
+                                navigator.push(InfoScreen())
+                            },
                         )
                     }
                 }
@@ -259,6 +263,7 @@ class ConnectionScreen() : Screen {
     @Composable
     fun ContentState(
         modifier: Modifier,
+        nameInformationClicked: () -> Unit,
         createConnection: () -> Unit,
         disconnectFromPartner: () -> Unit,
         connectWithPartner: (String) -> Unit,
@@ -275,7 +280,7 @@ class ConnectionScreen() : Screen {
             val createConnectionText = if (connection == null) {
                 "Create Connection To Share With Your Partner"
             } else {
-                "Connection Code: ${connection.id}"
+                "Connected! Connection Code: ${connection.id}"
             }
 
             ConnectionScreenItem(
@@ -396,6 +401,15 @@ class ConnectionScreen() : Screen {
                     )
                 }
             }
+
+            Divider(modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp))
+
+            ConnectionScreenItem(
+                text = "Name information",
+                onClick = {
+                    nameInformationClicked()
+                },
+            )
         }
     }
 
@@ -467,4 +481,3 @@ class ConnectionScreen() : Screen {
         }
     }
 }
-// noah liked offline on p7

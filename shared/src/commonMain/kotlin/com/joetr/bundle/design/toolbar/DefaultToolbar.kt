@@ -1,5 +1,6 @@
 package com.joetr.bundle.design.toolbar
 
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.IconButton
 import androidx.compose.material.Surface
@@ -17,6 +18,7 @@ import com.joetr.bundle.design.theme.AppTheme
 @OptIn(ExperimentalMaterial3Api::class)
 internal fun DefaultToolbar(
     onBack: (() -> Unit)? = null,
+    actions: @Composable RowScope.() -> Unit = {},
 ) {
     AppTheme {
         Surface {
@@ -39,6 +41,7 @@ internal fun DefaultToolbar(
                         }
                     }
                 },
+                actions = actions,
             )
         }
     }
