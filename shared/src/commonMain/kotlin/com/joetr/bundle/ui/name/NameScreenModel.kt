@@ -30,7 +30,7 @@ class NameScreenModel(
     private var updatesJob: Job? = null
     private var cacheJob: Job? = null
 
-    var names: List<Pair<String, List<NameYearData>>>? = null
+    var names: MutableList<Pair<String, List<NameYearData>>>? = null
 
     init {
         screenModelScope.launch(coroutineDispatcher) {
@@ -72,7 +72,7 @@ class NameScreenModel(
                 onSuccess = {
                     it.collect { data ->
                         val connection = data.second
-                        names = data.first
+                        names = data.first.toMutableList()
                         val lastName = data.third
 
                         val userId = nameRepository.getUserId()
@@ -169,6 +169,11 @@ class NameScreenModel(
     fun nameRemoved(name: String, gender: String, liked: Boolean) {
         screenModelScope.launch(coroutineDispatcher) {
             nameRepository.insertName(name, gender, liked)
+
+            // remove from cache
+            if (names?.isNotEmpty() == true) {
+                names?.removeFirst()
+            }
         }
     }
 
