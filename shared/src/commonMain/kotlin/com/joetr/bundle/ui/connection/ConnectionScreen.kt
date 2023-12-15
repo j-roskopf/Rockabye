@@ -3,6 +3,7 @@ package com.joetr.bundle.ui.connection
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -17,6 +18,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ChevronRight
+import androidx.compose.material.icons.filled.Public
 import androidx.compose.material.icons.filled.Send
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material.icons.outlined.Check
@@ -31,11 +33,14 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.lifecycle.LifecycleEffect
 import cafe.adriel.voyager.core.screen.Screen
@@ -285,6 +290,7 @@ class ConnectionScreen() : Screen {
 
             ConnectionScreenItem(
                 text = createConnectionText,
+                icon = Icons.Default.Public,
                 showChevron = connection == null,
                 onClick = {
                     if (connection == null) {
@@ -308,6 +314,7 @@ class ConnectionScreen() : Screen {
 
                 ConnectionScreenItem(
                     text = connectWithPartnerText,
+                    isExpanded = textFieldVisible.value,
                     onClick = {
                         textFieldVisible.value = textFieldVisible.value.not()
                     },
@@ -372,6 +379,7 @@ class ConnectionScreen() : Screen {
 
             ConnectionScreenItem(
                 text = "Enter baby's last name to display alongside first names",
+                isExpanded = lastNameFieldVisible.value,
                 onClick = {
                     lastNameFieldVisible.value = lastNameFieldVisible.value.not()
                 },
@@ -458,6 +466,8 @@ class ConnectionScreen() : Screen {
         text: String,
         onClick: () -> Unit,
         showChevron: Boolean = true,
+        icon: ImageVector = Icons.Default.ChevronRight,
+        isExpanded: Boolean = false,
     ) {
         Row(
             modifier = Modifier.defaultMinSize(minHeight = 64.dp).clickable {
@@ -472,9 +482,10 @@ class ConnectionScreen() : Screen {
             )
 
             if (showChevron) {
+                val rotation: Float by animateFloatAsState(if (isExpanded) 90f else 0f)
                 Icon(
-                    modifier = Modifier.padding(start = 4.dp),
-                    imageVector = Icons.Default.ChevronRight,
+                    modifier = Modifier.padding(start = 4.dp).rotate(rotation),
+                    imageVector = icon,
                     contentDescription = null,
                 )
             }

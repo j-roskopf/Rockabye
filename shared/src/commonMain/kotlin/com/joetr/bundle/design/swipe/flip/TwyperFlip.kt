@@ -33,6 +33,7 @@ inline fun <reified T> TwyperFlip(
     crossinline cardModifier: () -> Modifier,
     crossinline front: @Composable (T) -> Unit,
     crossinline back: @Composable (T) -> Unit,
+    crossinline cardFlipped: () -> Unit,
 ) {
     Box(modifier = Modifier) {
         val list = items.take(stackCount).reversed()
@@ -51,6 +52,7 @@ inline fun <reified T> TwyperFlip(
                     Card(
                         modifier = modifier
                             .clickable {
+                                cardFlipped()
                                 flipCardController.setCardFlipState()
                             }
                             .pointerInput(Unit) {

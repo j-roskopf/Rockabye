@@ -299,8 +299,15 @@ class NameScreen : Screen {
                     Modifier
                 }
 
+                val isCardFlipped = remember {
+                    mutableStateOf(false)
+                }
+
                 TwyperFlip(
                     modifier = Modifier.padding(horizontal = 32.dp),
+                    cardFlipped = {
+                        isCardFlipped.value = isCardFlipped.value.not()
+                    },
                     items = items,
                     twyperFlipController = twyperController,
                     onItemRemoved = { item, direction ->
@@ -385,8 +392,13 @@ class NameScreen : Screen {
                                 colors = ButtonDefaults.buttonColors(
                                     containerColor = MaterialTheme.colorScheme.tertiaryContainer,
                                 ),
-                                onClick = debouncedClick {
-                                    learnMore(item)
+                                onClick = {
+                                    if (isCardFlipped.value) {
+                                        learnMore(item)
+                                    } else {
+                                        twyperController.flip()
+                                        isCardFlipped.value = isCardFlipped.value.not()
+                                    }
                                 },
                             ) {
                                 Text(
@@ -423,6 +435,7 @@ class NameScreen : Screen {
 
                     Button(
                         onClick = {
+                            isCardFlipped.value = isCardFlipped.value.not()
                             twyperController.flip()
                         },
                         modifier = Modifier.size(64.dp),
