@@ -72,7 +72,9 @@ class NameScreenModel(
                 onSuccess = {
                     it.collect { data ->
                         val connection = data.second
-                        names = data.first.toMutableList()
+                        if (names == null) {
+                            names = data.first.toMutableList()
+                        }
                         val lastName = data.third
 
                         val userId = nameRepository.getUserId()

@@ -1,6 +1,5 @@
 package com.joetr.bundle.ui.name
 
-import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -117,62 +116,55 @@ class NameScreen : Screen {
                 )
             },
         ) { paddingValues ->
-            AnimatedContent(
-                targetState = state,
-                contentKey = {
-                    state.animationKey
-                },
-            ) { targetState ->
-                when (targetState) {
-                    is NameScreenState.Content -> ContentState(
-                        modifier = Modifier.padding(paddingValues),
-                        data = targetState.data,
-                        nameRemoved = { name, gender, liked ->
-                            screenModel.nameRemoved(name, gender, liked)
-                        },
-                        seenNamesClicked = {
-                            navigator.push(SeenNamesScreen(it))
-                        },
-                        filterClicked = {
-                            navigator.push(FilterScreen())
-                        },
-                        endReached = {
-                            screenModel.readData()
-                        },
-                        learnMore = {
-                            navigator.push(NameDetailScreen(it))
-                        },
-                        connectionClicked = {
-                            navigator.push(ConnectionScreen())
-                        },
-                        personStatus = targetState.personStatus,
-                        connectionId = targetState.connectionCode,
-                        lastName = targetState.lastName,
-                    )
+            when (state) {
+                is NameScreenState.Content -> ContentState(
+                    modifier = Modifier.padding(paddingValues),
+                    data = state.data,
+                    nameRemoved = { name, gender, liked ->
+                        screenModel.nameRemoved(name, gender, liked)
+                    },
+                    seenNamesClicked = {
+                        navigator.push(SeenNamesScreen(it))
+                    },
+                    filterClicked = {
+                        navigator.push(FilterScreen())
+                    },
+                    endReached = {
+                        screenModel.readData()
+                    },
+                    learnMore = {
+                        navigator.push(NameDetailScreen(it))
+                    },
+                    connectionClicked = {
+                        navigator.push(ConnectionScreen())
+                    },
+                    personStatus = state.personStatus,
+                    connectionId = state.connectionCode,
+                    lastName = state.lastName,
+                )
 
-                    is NameScreenState.Error -> ErrorState(
-                        modifier = Modifier.padding(paddingValues),
-                    )
+                is NameScreenState.Error -> ErrorState(
+                    modifier = Modifier.padding(paddingValues),
+                )
 
-                    is NameScreenState.Loading -> LoadingState(
-                        modifier = Modifier.padding(paddingValues),
-                    )
+                is NameScreenState.Loading -> LoadingState(
+                    modifier = Modifier.padding(paddingValues),
+                )
 
-                    is NameScreenState.Empty -> EmptyState(
-                        modifier = Modifier.padding(paddingValues),
-                        personStatus = targetState.personStatus,
-                        seenNamesClicked = {
-                            navigator.push(SeenNamesScreen(it))
-                        },
-                        filterClicked = {
-                            navigator.push(FilterScreen())
-                        },
-                        connectionClicked = {
-                            navigator.push(ConnectionScreen())
-                        },
-                        connectionId = targetState.connectionCode,
-                    )
-                }
+                is NameScreenState.Empty -> EmptyState(
+                    modifier = Modifier.padding(paddingValues),
+                    personStatus = state.personStatus,
+                    seenNamesClicked = {
+                        navigator.push(SeenNamesScreen(it))
+                    },
+                    filterClicked = {
+                        navigator.push(FilterScreen())
+                    },
+                    connectionClicked = {
+                        navigator.push(ConnectionScreen())
+                    },
+                    connectionId = state.connectionCode,
+                )
             }
         }
     }
