@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   code-style:
-    runs-on: macos-latest
+    runs-on: macos-14
     timeout-minutes: 60
 
     steps:
@@ -39,7 +39,7 @@ jobs:
         run: ./gradlew test
 
   android:
-    runs-on: ubuntu-latest
+    runs-on: macos-14
     needs: [ code-style ]
     timeout-minutes: 60
     env:
@@ -104,7 +104,7 @@ jobs:
           path: androidApp/build/outputs/
 
   ios:
-    runs-on: macos-13
+    runs-on: macos-14
     needs: [ code-style ]
     timeout-minutes: 60
     env:
@@ -135,6 +135,8 @@ jobs:
       - uses: gradle/gradle-build-action@v2
         with:
           cache-disabled: true
+
+      - run: brew install swiftlint
 
       - name: Build iOS application
         run: bundle exec fastlane ios release
