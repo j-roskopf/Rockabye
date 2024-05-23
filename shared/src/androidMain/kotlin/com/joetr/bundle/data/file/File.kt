@@ -82,5 +82,6 @@ class FileImpl : File {
         }
     }
 }
+
 // write some tests to benchmark speed
 // https://github.com/CodeHavenX/MonoRepo/blob/main/runasimi/mpp-lib/src/androidMain/kotlin/com/cramsan/runasimi/mpplib/AndroidFileReader.kt#L3
