@@ -5,7 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -89,7 +89,7 @@ class NameDetailScreen(val data: Pair<String, List<NameYearData>>) : Screen {
                 style = MaterialTheme.typography.headlineLarge,
             )
 
-            Divider(modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp))
+            HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp))
 
             LazyColumn(
                 modifier = Modifier.weight(1f),
@@ -106,7 +106,7 @@ class NameDetailScreen(val data: Pair<String, List<NameYearData>>) : Screen {
                             text = "${it.popularity} occurrences in the year ${it.year}",
                             style = MaterialTheme.typography.headlineSmall,
                         )
-                        Divider(modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp))
+                        HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp))
                     }
                 }
 
@@ -123,7 +123,7 @@ class NameDetailScreen(val data: Pair<String, List<NameYearData>>) : Screen {
                                 text = "${getCountryName(it.countryId)} - ${decimalToPercentage(it.probability)}% probability",
                                 style = MaterialTheme.typography.headlineSmall,
                             )
-                            Divider(
+                            HorizontalDivider(
                                 modifier = Modifier.padding(
                                     horizontal = 16.dp,
                                     vertical = 8.dp,
@@ -146,7 +146,7 @@ class NameDetailScreen(val data: Pair<String, List<NameYearData>>) : Screen {
                                 text = it,
                                 style = MaterialTheme.typography.headlineSmall,
                             )
-                            Divider(
+                            HorizontalDivider(
                                 modifier = Modifier.padding(
                                     horizontal = 16.dp,
                                     vertical = 8.dp,

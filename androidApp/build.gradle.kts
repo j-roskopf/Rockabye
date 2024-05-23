@@ -2,13 +2,14 @@ import java.io.FileInputStream
 import java.util.Properties
 
 plugins {
-    kotlin("multiplatform")
     id("com.android.application")
+    kotlin("multiplatform")
     id("org.jetbrains.compose")
     id("com.joetr.bundle.root")
     id("com.joetr.bundle.precommit")
     id("com.google.gms.google-services")
     id("com.google.firebase.crashlytics")
+    alias(libs.plugins.compose.compiler)
 }
 
 kotlin {

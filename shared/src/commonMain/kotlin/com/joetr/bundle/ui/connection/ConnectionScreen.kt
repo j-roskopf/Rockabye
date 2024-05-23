@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.Send
 import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.Public
 import androidx.compose.material.icons.filled.Send
@@ -24,7 +25,7 @@ import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material.icons.outlined.Check
 import androidx.compose.material.icons.outlined.Save
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -304,7 +305,7 @@ class ConnectionScreen() : Screen {
             }
 
             if (connection == null) {
-                Divider(modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp))
+                HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp))
 
                 val connectWithPartnerText = if (connection?.personTwo == null) {
                     "Enter Connection Code"
@@ -346,7 +347,7 @@ class ConnectionScreen() : Screen {
                         modifier = Modifier.defaultMinSize(minWidth = 48.dp, minHeight = 48.dp),
                         content = {
                             Icon(
-                                imageVector = Icons.Default.Send,
+                                imageVector = Icons.AutoMirrored.Default.Send,
                                 contentDescription = null,
                                 tint = MaterialTheme.colorScheme.primary,
                             )
@@ -356,7 +357,7 @@ class ConnectionScreen() : Screen {
             }
 
             if (connection != null) {
-                Divider(modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp))
+                HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp))
 
                 val disconnectText = if (connection.personTwo != null) {
                     "Disconnect from partner"
@@ -371,7 +372,7 @@ class ConnectionScreen() : Screen {
                 )
             }
 
-            Divider(modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp))
+            HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp))
 
             val lastNameFieldVisible = remember {
                 mutableStateOf(false)
@@ -410,7 +411,7 @@ class ConnectionScreen() : Screen {
                 }
             }
 
-            Divider(modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp))
+            HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp))
 
             ConnectionScreenItem(
                 text = "Name information",

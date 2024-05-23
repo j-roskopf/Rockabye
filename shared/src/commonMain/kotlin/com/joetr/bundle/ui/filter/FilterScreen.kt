@@ -22,7 +22,7 @@ import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.Female
 import androidx.compose.material.icons.filled.Male
 import androidx.compose.material.icons.filled.Transgender
-import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -264,21 +264,21 @@ class FilterScreen() : Screen {
                     onClick = genderClicked,
                 )
 
-                Divider(modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp))
+                HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp))
 
                 FilterRowItem(
                     text = "Time Period: ${selectedTimePeriod.display}",
                     onClick = timePeriodClicked,
                 )
 
-                Divider(modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp))
+                HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp))
 
                 FilterRowItem(
                     text = "Starts With: $selectedStartsWith",
                     onClick = startsWithClicked,
                 )
 
-                Divider(modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp))
+                HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp))
 
                 val display = if (selectedMaxLength == Int.MAX_VALUE) {
                     ""
@@ -291,7 +291,7 @@ class FilterScreen() : Screen {
                 )
             }
 
-            Divider(modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp))
+            HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp))
 
             PrimaryButton(
                 modifier = Modifier.fillMaxWidth(),
@@ -413,7 +413,7 @@ class FilterScreen() : Screen {
                 },
             )
 
-            Divider(modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp))
+            HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp))
 
             FilterRowItem(
                 text = "Specific Year",
@@ -422,7 +422,7 @@ class FilterScreen() : Screen {
                 },
             )
 
-            Divider(modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp))
+            HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp))
 
             FilterRowItem(
                 text = "Current Millennium (2000-Current)",
@@ -431,7 +431,7 @@ class FilterScreen() : Screen {
                 },
             )
 
-            Divider(modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp))
+            HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp))
 
             FilterRowItem(
                 text = "Previous Millennium (1900-1999)",
@@ -440,7 +440,7 @@ class FilterScreen() : Screen {
                 },
             )
 
-            Divider(modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp))
+            HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp))
 
             FilterRowItem(
                 text = "1880-1899",
@@ -471,7 +471,7 @@ class FilterScreen() : Screen {
                     showChevron = false,
                 )
                 if (index < range.size - 1) {
-                    Divider(modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp))
+                    HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp))
                 }
             }
         }

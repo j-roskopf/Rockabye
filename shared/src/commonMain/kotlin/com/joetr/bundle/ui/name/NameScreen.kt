@@ -22,6 +22,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Badge
 import androidx.compose.material.IconButton
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.Sort
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FilterAlt
 import androidx.compose.material.icons.filled.Flip
@@ -32,10 +33,10 @@ import androidx.compose.material.icons.filled.ThumbUp
 import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Divider
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -106,7 +107,7 @@ class NameScreen : Screen {
                             modifier = Modifier.defaultMinSize(minWidth = 48.dp, minHeight = 48.dp),
                             content = {
                                 Icon(
-                                    imageVector = Icons.Default.Sort,
+                                    imageVector = Icons.AutoMirrored.Default.Sort,
                                     contentDescription = null,
                                     tint = MaterialTheme.colorScheme.primary,
                                 )
@@ -181,7 +182,7 @@ class NameScreen : Screen {
         ) {
             IconButton(onClick = { expanded.value = expanded.value.not() }) {
                 Icon(
-                    imageVector = Icons.Default.Sort,
+                    imageVector = Icons.AutoMirrored.Default.Sort,
                     contentDescription = null,
                     tint = MaterialTheme.colorScheme.primary,
                 )
@@ -196,7 +197,7 @@ class NameScreen : Screen {
                     text = "Sort by:",
                 )
 
-                Divider(
+                HorizontalDivider(
                     modifier = Modifier.padding(
                         horizontal = 16.dp,
                         vertical = 8.dp,
@@ -213,7 +214,7 @@ class NameScreen : Screen {
                     )
 
                     if (it != NameSort.entries.last()) {
-                        Divider(
+                        HorizontalDivider(
                             modifier = Modifier.padding(
                                 horizontal = 16.dp,
                                 vertical = 8.dp,

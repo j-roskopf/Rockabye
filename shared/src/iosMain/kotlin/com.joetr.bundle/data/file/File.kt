@@ -3,25 +3,17 @@ package com.joetr.bundle.data.file
 import com.joetr.bundle.data.model.Gender
 import kotlinx.cinterop.BetaInteropApi
 import kotlinx.cinterop.ExperimentalForeignApi
-import kotlinx.cinterop.ObjCObjectVar
 import kotlinx.cinterop.addressOf
-import kotlinx.cinterop.alloc
-import kotlinx.cinterop.memScoped
-import kotlinx.cinterop.ptr
 import kotlinx.cinterop.usePinned
-import kotlinx.cinterop.value
 import platform.Foundation.NSBundle
 import platform.Foundation.NSData
-import platform.Foundation.NSError
 import platform.Foundation.NSFileHandle
 import platform.Foundation.NSString
-import platform.Foundation.NSURL
 import platform.Foundation.NSUTF8StringEncoding
 import platform.Foundation.closeFile
 import platform.Foundation.create
 import platform.Foundation.fileHandleForReadingAtPath
 import platform.Foundation.readDataOfLength
-import platform.Foundation.stringWithContentsOfFile
 import platform.posix.memcpy
 
 actual interface File {
@@ -35,7 +27,6 @@ actual interface File {
 }
 
 class FileImpl : File {
-
     @BetaInteropApi
     override suspend fun readFileInChunks(
         range: IntRange,
@@ -51,17 +42,7 @@ class FileImpl : File {
         }.flatten()
     }
 
-    /**
-     *         val chunkSize = 4096
-     *         val list = mutableListOf<String>()
-     *         val mainBundle = NSBundle.mainBundle()
-     *         val path = mainBundle.pathForResource(name = "compose-resources/yob2022", ofType = "txt") ?: throw Exception("File not found: $file")
-     *         val text = NSString.stringWithContentsOfFile(path, NSUTF8StringEncoding, null) as String
-     *         list.addAll(text.split("\n"))
-     */
-
     @BetaInteropApi
-    @OptIn(ExperimentalForeignApi::class)
     fun parseLargeFile(file: String): List<String> {
         val chunkSize = 4096
         val list = mutableListOf<String>()
@@ -127,47 +108,6 @@ class FileImpl : File {
             val parts = line.split(',')
             if (parts.size == 5) {
                 list.add(line)
-            }
-        }
-    }
-
-    class FileResource(
-        val fileName: String,
-        val extension: String,
-        val bundle: NSBundle = NSBundle.mainBundle,
-    ) {
-        open val path: String
-            get() = bundle.pathForResource(
-                name = fileName,
-                ofType = extension,
-                inDirectory = "",
-            )!!
-        open val url: NSURL
-            get() = bundle.URLForResource(
-                name = fileName,
-                withExtension = extension,
-                subdirectory = "",
-            )!!
-
-        @OptIn(ExperimentalForeignApi::class)
-        fun readText(): String {
-            val filePath = path
-            val (result: String?, error: NSError?) = memScoped {
-                val p = alloc<ObjCObjectVar<NSError?>>()
-                val result: String? = runCatching {
-                    NSString.stringWithContentsOfFile(
-                        path = filePath,
-                        encoding = NSUTF8StringEncoding,
-                        error = p.ptr,
-                    )
-                }.getOrNull()
-                result to p.value
-            }
-
-            if (error != null) {
-                throw Exception("asgmkslg")
-            } else {
-                return result!!
             }
         }
     }

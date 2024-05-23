@@ -6,6 +6,7 @@ plugins {
     id("org.jetbrains.kotlin.plugin.serialization")
     id("co.touchlab.crashkios.crashlyticslink") version libs.versions.crashlytics.get()
     id("app.cash.sqldelight") version libs.versions.sqlDelight.get()
+    alias(libs.plugins.compose.compiler)
 }
 
 kotlin {
@@ -26,8 +27,10 @@ kotlin {
 
     targets.configureEach {
         compilations.configureEach {
-            compilerOptions.configure {
-                freeCompilerArgs.add("-Xexpect-actual-classes")
+            compileTaskProvider.configure {
+                compilerOptions {
+                    freeCompilerArgs.add("-Xexpect-actual-classes")
+                }
             }
         }
     }
@@ -35,7 +38,6 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-                implementation("org.jetbrains.kotlin:kotlin-reflect:1.9.21")
                 implementation(compose.runtime)
                 implementation(compose.foundation)
                 implementation(compose.material)
@@ -149,4 +151,9 @@ sqldelight {
         }
         linkSqlite.set(true)
     }
+}
+
+compose.resources {
+    publicResClass = true
+    generateResClass = always
 }

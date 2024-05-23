@@ -15,7 +15,7 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ThumbDown
 import androidx.compose.material.icons.filled.ThumbUp
-import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -221,7 +221,7 @@ class SeenNamesScreen(
                             }
 
                             if (index < seenNames[it].size - 1) {
-                                Divider(
+                                HorizontalDivider(
                                     modifier = Modifier.padding(
                                         horizontal = 16.dp,
                                         vertical = 8.dp,
