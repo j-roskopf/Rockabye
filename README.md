@@ -3,6 +3,8 @@
   <h1>Rockabye</h1>
 </div>
 
+[![Hits-of-Code](https://hitsofcode.com/github/j-roskopf/Rockabye?branch=main)](https://hitsofcode.com/github/j-roskopf/Rockabye/view?branch=main)
+
 Swipe with your partner to find the perfect baby name
 
 ## Download 📦
